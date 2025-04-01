@@ -31,6 +31,7 @@ function add_feature() {
 
     xhr.send(data);
 }
+
 function get_features() {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "ajax/features_facilities.php", true);
@@ -42,6 +43,7 @@ function get_features() {
 
     xhr.send('get_features');
 }
+
 function rem_feature(val) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "ajax/features_facilities.php", true);
@@ -62,10 +64,12 @@ function rem_feature(val) {
 
     xhr.send('rem_feature=' + val);
 }
+
 facility_s_form.addEventListener('submit', function(e) {
     e.preventDefault();
     add_facility();
 });
+
 function add_facility() {
     let data = new FormData();
     data.append('name', facility_s_form.elements['facility_name'].value);
@@ -96,6 +100,7 @@ function add_facility() {
   
     xhr.send(data);
 }
+
 function get_facilities() {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "ajax/features_facilities.php", true);
@@ -128,6 +133,5 @@ function rem_facility(val) {
 }
 
 window.onload = function() {
-    get_facilities();
     get_facilities();
 }

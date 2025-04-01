@@ -3,11 +3,13 @@
     define('SITE_URL','http://127.0.0.1/booking-hotel-php/');
     define('ABOUT_IMG_PATH', SITE_URL.'/img/about/');
     define('FACILITIES_IMG_PATH', SITE_URL.'/img/facilities/');
+    define('ROOMS_IMG_PATH', SITE_URL.'/img/rooms/');
 
     //backend upload process needs this data
     define('UPLOAD_IMAGE_PATH', $_SERVER['DOCUMENT_ROOT'].'/booking-hotel-php/img/');
     define('ABOUT_FOLDER', 'about/');
     define('FACILITIES_FOLDER', 'facilities/');
+    define('ROOMS_FOLDER', 'rooms/');
 
 
     function adminLogin() {

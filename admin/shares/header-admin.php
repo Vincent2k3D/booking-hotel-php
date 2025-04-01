@@ -19,7 +19,10 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="rooms.php">Rooms</a>
+<<<<<<<<< Temporary merge branch 1
+=========
                     </li>
+                   
                     <li class="nav-item">
                         <a class="nav-link text-white" href="features.php">Features & Facilities</a>
                     </li>

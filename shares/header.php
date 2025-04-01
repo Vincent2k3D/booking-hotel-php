@@ -1,11 +1,5 @@
-
-<?php 
-    require('admin/database/db_config.php');
-    require('admin/shares/essentials.php');
-?>
-
 <div class="container-fluid position-relative p-0">
-    <nav id="nav-bar" class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#">
                 <h1 class="text-success m-0">
@@ -19,13 +13,34 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="rooms.php">Rooms</a></li>
-                    <li class="nav-item"><a class="nav-link" href="service.php">Facilities</a></li>
+                    <li class="nav-item"><a class="nav-link" href="service.php">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
                     <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                 </ul>
-                <div class="ms-3">
-                    <button class="btn btn-primary rounded-3 me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                    <button class="btn btn-primary rounded-3" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+                <div class="d-flex">
+                    <?php
+                    if (isset($_SESSION['login']) && $_SESSION['login'] == true) {
+                        $path = USER_IMG_PATH;
+                        echo <<<data
+                            <div class="btn-group">
+                            <button type="button" class="btn btn-outline-dark  dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                               <img src="$path$_SESSION[uPic]" sty;e="width: 30px; height: 30px;" class="me-2">
+                            $_SESSION[uName]
+                            </button> 
+                                <ul class="dropdown-menu dropdown-menu-lg-end">
+                                    <li><a class="dropdown-item" href=""profile.php>Profile</a></li>
+                                    <li><a class="dropdown-item" href=""bookings.php>Bookings</a></li>
+                                    <li><a class="dropdown-item" href=""logout.php>Logout</a></li>
+                                </ul>
+                            </div>
+                        data;
+                    } else {
+                        echo <<<data
+                        <button class="btn btn-outline-dark shadow-none me-lg-3 me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                        <button class="btn btn-outline-dark shadow-none" data-bs-toggle="modal" data-bs-target="#registerModal">Register</button>
+                        data;
+                    }
+                    ?>
                 </div>
             </div>
         </div>
@@ -35,7 +50,7 @@
     <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form>
+                <form id="login">
                     <div class="modal-header">
                         <h1 class="modal-title d-flex align-items-center fs-5" id="staticBackdropLabel">
                             <i class="bi bi-person-circle fs-3 me-2"></i>User Login
@@ -44,16 +59,18 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Email address</label>
-                            <input type="email" class="form-control shadow-none">
+                            <label class="form-label">Email / Mobile</label>
+                            <input type="text" name="email_mob" require class="form-control shadow-none">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Password</label>
-                            <input type="password" class="form-control shadow-none">
+                            <input type="password" name="pass" require class="form-control shadow-none">
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <button type="submit" class="btn btn-primary rounded-3">Login</button>
-                            <a href="javascript: void(0)" class="text-secondary text-decoration-none">Forgot Password?</a>
+                            <button type="button" class="btn text-secondary text-decoration-none shadow-none" data-bs-target="#forgotModal" data-bs-dismiss="modal">
+                                Forgot Password?
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -78,32 +95,41 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-md-6 ps-0 mb-3">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control shadow-none">
+                                    <label name="name" class="form-label">Name</label>
+                                    <input name="name" type="text" class="form-control shadow-none" require>
                                 </div>
                                 <div class="col-md-6 ps-0 mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control shadow-none">
+                                    <label name="email" class="form-label">Email</label>
+                                    <input name="email" type="email" class="form-control shadow-none">
                                 </div>
                                 <div class="col-md-6 ps-0 mb-3">
                                     <label class="form-label">Phone Number</label>
-                                    <input type="number" class="form-control shadow-none">
+                                    <input name="phonenum" type="number" class="form-control shadow-none" require>
                                 </div>
                                 <div class="col-md-6 ps-0 mb-3">
-                                    <label class="form-label">Date of birth</label>
-                                    <input type="date" class="form-control shadow-none">
+                                    <label class="form-label">Picture</label>
+                                    <input name="proflie" type="file" accept=".jpg, .jpeg, .png, .webp" class="form-control shadow-none" require>
                                 </div>
                                 <div class="ps-0 mb-3">
                                     <label class="form-label">Address</label>
-                                    <textarea rows="1" class="form-control shadow-none"></textarea>
+                                    <textarea name="address" class="form-control shadow-none" row="1" require></textarea>
                                 </div>
                                 <div class="col-md-6 ps-0 mb-3">
+                                    <label class="form-label">Pincode</label>
+                                    <input name="pincode" type="number" class="form-control shadow-none" require>
+                                </div>
+                                <div class="col-md-6 ps-0 mb-3">
+                                    <label class="form-label">Date of birth</label>
+                                    <input name="dob" type="date" class="form-control shadow-none" require>
+                                </div>
+
+                                <div class="col-md-6 ps-0 mb-3">
                                     <label class="form-label">Password</label>
-                                    <input type="password" class="form-control shadow-none">
+                                    <input name="password" type="password" class="form-control shadow-none" require>
                                 </div>
                                 <div class="col-md-6 ps-0 mb-3">
                                     <label class="form-label">Confirm Password</label>
-                                    <input type="password" class="form-control shadow-none">
+                                    <input name="cpass" type="password" class="form-control shadow-none" require>
                                 </div>
                             </div>
                         </div>
@@ -115,8 +141,7 @@
             </div>
         </div>
     </div>
-    <!-- Reach us -->
-   
+
     <div class="container-fluid bg-primary py-5 mb-2 hero-header">
         <div class="container py-5">
             <div class="row justify-content-center py-5">
@@ -134,6 +159,36 @@
                             style="margin-top: 7px;">Search</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- //modal 2 -->
+    <div class="modal fade" id="forgotModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="forgot-form">
+                    <div class="modal-header">
+                        <h5 class="modal-title d-flex align-items-center fs-5" id="staticBackdropLabel">
+                            <i class="bi bi-person-circle fs-3 me-2"></i>Forgot Password
+                        </h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-4">
+                            <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap lh-base">
+                                Note: A link will be sent to your email to reset your password!!.
+                            </span>
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" require class="form-control shadow-none">
+                        </div>
+                        <div class="mb-2 text-end">
+                            <button type="button" class="btn shadow-none p-0 me-2" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">
+                                CENCEL
+                            </button>
+                            <button type="submit" class="btn btn-primary rounded-3">SEND LINK</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
